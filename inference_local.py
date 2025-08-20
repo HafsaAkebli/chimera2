@@ -195,6 +195,11 @@ def interface_0_handler():
             raise ValueError("Feature extraction failed. Cannot proceed to GAT.")
         else:
             print(f"✅ Extracted {features.shape[0]} features of dimension {features.shape[1]}")
+        
+        mean_pooled_vector = features.mean(axis=0).astype(np.float32)
+        print("📊 First 5 elements of the mean pooled feature vector:")
+        print(mean_pooled_vector[:5])
+
 
         #GAT_MODEL_PATH = MODEL_PATH / "gat/GAT_UNI2_cosine_top7K.pth"
         MEAN_MIL_PATH = MODEL_PATH / "meanmil/meanMIL_1024_fixed.pt"

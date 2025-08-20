@@ -4,7 +4,7 @@ import torch.nn.functional as F
 import numpy as np
 import joblib
 from pathlib import Path
-from sklearn.preprocessing import StandardScaler
+
 
 # === DEFINE CONCATENATION-BASED MLP MODEL ===
 class FusionMLP(nn.Module):

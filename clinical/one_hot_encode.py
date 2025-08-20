@@ -113,21 +113,22 @@ def encode_patient(patient_data: dict, meta_path: str):
     print(f"✅ Clinical one-hot+numeric vector built. Shape: {X.shape}")
     return X, columns
 
-PATIENT_JSON = Path("/mnt/dmif-nas/MITEL/hafsa/chimera_bcg/Task2/input1/chimera-clinical-data-of-bladder-cancer-patients.json")
-META_PATH = Path("/mnt/dmif-nas/MITEL/hafsa/chimera_bcg/Task2/model3/clinical/clinical_preproc_meta_T2.json")
+
+
+
+#PATIENT_JSON = Path("/mnt/dmif-nas/MITEL/hafsa/chimera_bcg/Task2/input1/chimera-clinical-data-of-bladder-cancer-patients.json")
+#META_PATH = Path("/mnt/dmif-nas/MITEL/hafsa/chimera_bcg/Task2/model3/clinical/clinical_preproc_meta_T2.json")
 
 # === load single patient data ===
-with open(PATIENT_JSON, "r") as f:
-    patient_data = json.load(f)
+#with open(PATIENT_JSON, "r") as f:
+    #patient_data = json.load(f)
 
 # === encode ===
-X, cols = encode_patient(patient_data, str(META_PATH))
+#X, cols = encode_patient(patient_data, str(META_PATH))
 
 # === print results ===
-print("\n✅ Clinical vector built:")
-print(f"   Shape: {X.shape}\n")
-np.set_printoptions(precision=3, suppress=True) 
-print("X =", X)
+#print(f"   Shape: {X.shape}\n")
+#print("X =", X)
 
-for name, val in zip(cols, X[0]):
-    print(f"{name:20s} {val:.3f}")
+#for name, val in zip(cols, X[0]):
+    #print(f"{name:20s} {val:.3f}")

@@ -90,8 +90,6 @@ def extract_features_from_images(image_list, uni2_path, batch_size=370):
 
     all_features = np.vstack(all_features)
     print(f"⏱️ Feature extraction time: {time.time() - start:.2f} seconds")
-    del model
-    torch.cuda.empty_cache()
     
     print(f"✅ Extracted feature matrix shape: {all_features.shape}")
     return all_features

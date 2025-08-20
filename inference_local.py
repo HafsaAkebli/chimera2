@@ -42,18 +42,18 @@ Image.MAX_IMAGE_PIXELS = None
 from classifier.classifer_clinical_only import predict_probability_clinical_only
 
 from classifier.classifier_new import predict_probability
-#from histology.feature_extraction_uni2_1 import extract_features_from_images
+from histology.feature_extraction_uni2_1 import extract_features_from_images
 #from histology.patch_extraction_optimal import extract_patches_in_memory, extract_patches_in_memory_2
 from histology.patch_extraction_br import extract_patches_by_cellularity
 from histology.mean_mil import mean_mil_embed
 from clinical.one_hot_encode import encode_patient
-from histology.feature_extarction_uni2 import extract_features_from_images
+
 print("Torch:", torch.__version__)
 print("Torchvision:", torchvision.__version__)
 print("CUDA available:", torch.cuda.is_available())
 
 
-INPUT_PATH = Path("/mnt/dmif-nas/MITEL/hafsa/chimera_bcg/Task2/input1")
+INPUT_PATH = Path("/mnt/dmif-nas/MITEL/hafsa/chimera_bcg/Task2/input3")
 #OUTPUT_PATH = Path("/output")
 OUTPUT_PATH = Path("/mnt/dmif-nas/MITEL/hafsa/chimera_bcg/Task2/model3/output")
 
@@ -93,18 +93,6 @@ def interface_0_handler():
     )
     _show_torch_cuda_info()
 
-    # Debug: Print information about loaded data
-
-    #print("Data Loading Summary:")
-    # Handle PyVips objects for tissue mask
-    #if hasattr(input_tissue_mask, 'width'):
-    #    print(f"Tissue mask size: {input_tissue_mask.width}x{input_tissue_mask.height}")
-    #else:
-    #    print(f"Tissue mask shape: {input_tissue_mask.shape}")
-    
-    #print(f"Pathology WSI type: {type(input_bladder_cancer_tissue_biopsy_whole_slide_image)}")
-    #if hasattr(input_bladder_cancer_tissue_biopsy_whole_slide_image, 'width'):
-    #    print(f"Pathology WSI size: {input_bladder_cancer_tissue_biopsy_whole_slide_image.width}x{input_bladder_cancer_tissue_biopsy_whole_slide_image.height}")
     print(f"Clinical data keys: {list(input_chimera_clinical_data_of_bladder_cancer_patients.keys()) if input_chimera_clinical_data_of_bladder_cancer_patients else 'None'}")
 
     #handle both mha and tif 
@@ -184,10 +172,6 @@ def interface_0_handler():
         #UNI2 path
         UNI2_MODEL_PATH = MODEL_PATH / "uni2/pytorch_model.bin"
         features = extract_features_from_images(patch_list, UNI2_MODEL_PATH)
-
-        #delete patch list once feature are extracted
-        #del patch_list
-        #torch.cuda.empty_cache()
 
         # ✅ Check if feature extraction succeeded
         if features is None or features.shape[0] == 0:

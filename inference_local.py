@@ -238,9 +238,6 @@ def interface_0_handler():
         histology_embedding,
         clinical_embedding,
         model_path=Classifier_PATH)
-    
-        del graph_histology_embedding, clinical_embedding
-        torch.cuda.empty_cache()
 
         print(f"✅ Prediction output: {output_brs_binary_classification}")
         os.makedirs(OUTPUT_PATH, exist_ok=True)

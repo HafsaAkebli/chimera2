@@ -30,14 +30,12 @@ class FusionMLP(nn.Module):
         # per-modality projectors
         self.hist_proj = nn.Sequential(
             nn.Linear(hist_dim, proj_dim),
-            #nn.LayerNorm(proj_dim),
             make_norm(proj_dim),
             nn.ReLU(),
             nn.Dropout(dropout),
         )
         self.clin_proj = nn.Sequential(
             nn.Linear(clin_dim, proj_dim),
-            #nn.LayerNorm(proj_dim),
             make_norm(proj_dim),
             nn.ReLU(),
             nn.Dropout(dropout),

@@ -41,11 +41,12 @@ from clinical.clinical_encoding import build_clinical_text_from_json, get_clinic
 from classifier.classifier import predict_probability
 from classifier.classifer_clinical_only import predict_probability_clinical_only
 from histology.feature_extraction_uni2_1 import extract_features_from_images
-from histology.gat_encoder_new import extract_patient_embedding_from_features
+#from histology.gat_encoder_new import extract_patient_embedding_from_features
 
 #from histology.patch_extraction_optimal import extract_patches_in_memory, extract_patches_in_memory_2
 from histology.patch_extraction_br import extract_patches_by_cellularity
 from histology.mean_mil import mean_mil_embed
+from clinical.one_hot_encode import encode_patient
 
 print("Torch:", torch.__version__)
 print("Torchvision:", torchvision.__version__)
@@ -196,25 +197,26 @@ def interface_0_handler():
         #graph_histology_embedding = extract_patient_embedding_from_features(features, k=5, gat_path=str(GAT_MODEL_PATH))
         #print(f"✅ GAT embedding completed. Shape: {graph_histology_embedding.shape}")
         histology_embedding = mean_mil_embed(features, str(MEAN_MIL_PATH)) 
-       
-
-
-
 
         del features
         torch.cuda.empty_cache()
 
-        print("\n📄 Building clinical text from patient JSON...")
-        clinical_text = build_clinical_text_from_json(
-        patient_data=input_chimera_clinical_data_of_bladder_cancer_patients,
-        patient_id=uuid)
-        print(f"   ➤ Clinical text built:\n{clinical_text}")
-    
-        print("\n🧠 Getting clinical embedding from transformer...")
-        Sentence_Transformer_PATH = MODEL_PATH / "multilingual_e5"
+        #clinical_text = build_clinical_text_from_json(
+        #patient_data=input_chimera_clinical_data_of_bladder_cancer_patients,patient_id=uuid)
+        #print(f"   ➤ Clinical text built:\n{clinical_text}")
+        #print("\n🧠 Getting clinical embedding from transformer...")
+        #Sentence_Transformer_PATH = MODEL_PATH / "multilingual_e5"
+        # clinical_embedding = get_clinical_embedding(clinical_text, Sentence_Transformer_PATH)
+        # print(f"✅ Clinical embedding shape: {clinical_embedding.shape}")
 
-        clinical_embedding = get_clinical_embedding(clinical_text, Sentence_Transformer_PATH)
-        print(f"✅ Clinical embedding shape: {clinical_embedding.shape}")
+        META_PATH = MODEL_PATH / "clinical" / "clinical_preproc_meta_T2.json"
+        print("\n🧮 Building one-hot clinical vector...")
+        clinical_embedding, clinical_cols = encode_patient(
+            patient_data=input_chimera_clinical_data_of_bladder_cancer_patients,
+            meta_path=str(META_PATH),
+        )
+        print(f"   ➤ Clinical vector shape: {clinical_embedding.shape}")
+
 
         
         Classifier_PATH = MODEL_PATH / "classifier/concat_fusion_model_cosine_7K_sub2.pth"

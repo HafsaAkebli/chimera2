@@ -188,11 +188,15 @@ def interface_0_handler():
             print(f"✅ Extracted {features.shape[0]} features of dimension {features.shape[1]}")
 
         GAT_MODEL_PATH = MODEL_PATH / "gat/GAT_UNI2_cosine_top7K.pth"
+        MEAN_MIL_PATH= MODEL_PATH / "meanmil/meanMIL_1024_fixed.pt"
+        print("\n📊 Starting patient-level embedding using Mean-MIL...")
     
-        print("\n📊 Starting patient-level graph embedding using GAT...")
         print(f"   ➤ GAT model path: {GAT_MODEL_PATH}")
         graph_histology_embedding = extract_patient_embedding_from_features(features, k=5, gat_path=str(GAT_MODEL_PATH))
         print(f"✅ GAT embedding completed. Shape: {graph_histology_embedding.shape}")
+
+
+        
 
         del features
         torch.cuda.empty_cache()

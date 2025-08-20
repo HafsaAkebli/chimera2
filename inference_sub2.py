@@ -36,7 +36,7 @@ from PIL import Image
 Image.MAX_IMAGE_PIXELS = None
 
 
-
+#from clinical.one_hot_encode import
 from clinical.clinical_encoding import build_clinical_text_from_json, get_clinical_embedding
 from classifier.classifier import predict_probability
 from classifier.classifer_clinical_only import predict_probability_clinical_only

@@ -10,6 +10,7 @@ from timm.data.transforms_factory import create_transform
 from PIL import Image
 import multiprocessing
 import time
+from huggingface_hub import login
 
 # === In-Memory Dataset ===
 class InMemoryPatchDataset(Dataset):
@@ -28,6 +29,7 @@ class InMemoryPatchDataset(Dataset):
 
 # === Model + Transform Loader ===
 def load_uni2_model(uni2_path):
+    login(token="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")
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     timm_kwargs = {
@@ -47,16 +49,13 @@ def load_uni2_model(uni2_path):
         'dynamic_img_size': True
     }
 
-    model = timm.create_model(pretrained=False, **timm_kwargs)
-    model.load_state_dict(torch.load(uni2_path, map_location=device), strict=True)
+    model = timm.create_model("hf-hub:MahmoodLab/UNI2-h", pretrained=True, **timm_kwargs)
     model = model.to(device).eval()
 
-    transform = transforms.Compose([
-        transforms.Resize(224),
-        transforms.ToTensor(),
-        transforms.Normalize(mean=(0.485, 0.456, 0.406),
-                             std=(0.229, 0.224, 0.225)),
-    ])
+    # ✅ Use exact same transform as in training
+    config = resolve_data_config(model.pretrained_cfg, model=model)
+    transform = create_transform(**config)
+
 
     return model, transform, device
 

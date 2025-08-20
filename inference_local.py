@@ -42,18 +42,18 @@ Image.MAX_IMAGE_PIXELS = None
 from classifier.classifer_clinical_only import predict_probability_clinical_only
 
 from classifier.classifier_new import predict_probability
-from histology.feature_extraction_uni2_1 import extract_features_from_images
+#from histology.feature_extraction_uni2_1 import extract_features_from_images
 #from histology.patch_extraction_optimal import extract_patches_in_memory, extract_patches_in_memory_2
 from histology.patch_extraction_br import extract_patches_by_cellularity
 from histology.mean_mil import mean_mil_embed
 from clinical.one_hot_encode import encode_patient
-
+from histology.feature_extarction_uni2 import extract_features_from_images
 print("Torch:", torch.__version__)
 print("Torchvision:", torchvision.__version__)
 print("CUDA available:", torch.cuda.is_available())
 
 
-INPUT_PATH = Path("/mnt/dmif-nas/MITEL/hafsa/chimera_bcg/Task2/input3")
+INPUT_PATH = Path("/mnt/dmif-nas/MITEL/hafsa/chimera_bcg/Task2/input1")
 #OUTPUT_PATH = Path("/output")
 OUTPUT_PATH = Path("/mnt/dmif-nas/MITEL/hafsa/chimera_bcg/Task2/model3/output")
 
@@ -186,8 +186,8 @@ def interface_0_handler():
         features = extract_features_from_images(patch_list, UNI2_MODEL_PATH)
 
         #delete patch list once feature are extracted
-        del patch_list
-        torch.cuda.empty_cache()
+        #del patch_list
+        #torch.cuda.empty_cache()
 
         # ✅ Check if feature extraction succeeded
         if features is None or features.shape[0] == 0:

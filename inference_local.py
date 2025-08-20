@@ -53,7 +53,7 @@ print("Torchvision:", torchvision.__version__)
 print("CUDA available:", torch.cuda.is_available())
 
 
-INPUT_PATH = Path("/mnt/dmif-nas/MITEL/hafsa/chimera_bcg/Task2/input3")
+INPUT_PATH = Path("/mnt/dmif-nas/MITEL/hafsa/chimera_bcg/Task2/input5")
 #OUTPUT_PATH = Path("/output")
 OUTPUT_PATH = Path("/mnt/dmif-nas/MITEL/hafsa/chimera_bcg/Task2/model3/output")
 
@@ -155,14 +155,13 @@ def interface_0_handler():
         print(f"   ➤ First 5 values: {clinical_embedding[0, :5]}")
 
 
-        Classifier_Clinical_Only_PATH = MODEL_PATH / "classifier/clinical_only_MLP_T2_sub2.pth"
-        Scaler_Clinical_Only_PATH = MODEL_PATH / "classifier/clinical_only_MLP_T2_sub2_scaler.pkl"
+        #Classifier_Clinical_Only_PATH = MODEL_PATH / "classifier/clinical_only_MLP_T2_sub2.pth"
+        #Scaler_Clinical_Only_PATH = MODEL_PATH / "classifier/clinical_only_MLP_T2_sub2_scaler.pkl"
         
-        output_brs_binary_classification = predict_probability_clinical_only(
-            clinical_embedding,
-            model_path=Classifier_Clinical_Only_PATH,
-            scaler_path=Scaler_Clinical_Only_PATH
-        )
+        #output_brs_binary_classification = predict_probability_clinical_only(
+            #clinical_embedding,
+            #model_path=Classifier_Clinical_Only_PATH,
+            #scaler_path=Scaler_Clinical_Only_PATH)
         
         del clinical_embedding
         torch.cuda.empty_cache()

@@ -1,6 +1,5 @@
 torch>=2.0.1
 torchvision>=0.15
-torch-geometric>=2.3
 timm
 
 sentence-transformers==3.4.1

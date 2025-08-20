@@ -45,6 +45,7 @@ from histology.gat_encoder_new import extract_patient_embedding_from_features
 
 #from histology.patch_extraction_optimal import extract_patches_in_memory, extract_patches_in_memory_2
 from histology.patch_extraction_br import extract_patches_by_cellularity
+from histology.mean_mil import mean_mil_embed
 
 print("Torch:", torch.__version__)
 print("Torchvision:", torchvision.__version__)
@@ -187,16 +188,18 @@ def interface_0_handler():
         else:
             print(f"✅ Extracted {features.shape[0]} features of dimension {features.shape[1]}")
 
-        GAT_MODEL_PATH = MODEL_PATH / "gat/GAT_UNI2_cosine_top7K.pth"
-        MEAN_MIL_PATH= MODEL_PATH / "meanmil/meanMIL_1024_fixed.pt"
+        #GAT_MODEL_PATH = MODEL_PATH / "gat/GAT_UNI2_cosine_top7K.pth"
+        MEAN_MIL_PATH = MODEL_PATH / "meanmil/meanMIL_1024_fixed.pt"
         print("\n📊 Starting patient-level embedding using Mean-MIL...")
     
-        print(f"   ➤ GAT model path: {GAT_MODEL_PATH}")
-        graph_histology_embedding = extract_patient_embedding_from_features(features, k=5, gat_path=str(GAT_MODEL_PATH))
-        print(f"✅ GAT embedding completed. Shape: {graph_histology_embedding.shape}")
+        print(f"   ➤ GAT model path: {MEAN_MIL_PATH}")
+        #graph_histology_embedding = extract_patient_embedding_from_features(features, k=5, gat_path=str(GAT_MODEL_PATH))
+        #print(f"✅ GAT embedding completed. Shape: {graph_histology_embedding.shape}")
+        histology_embedding = mean_mil_embed(features, str(MEAN_MIL_PATH)) 
+       
 
 
-        
+
 
         del features
         torch.cuda.empty_cache()

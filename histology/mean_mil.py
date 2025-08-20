@@ -27,7 +27,7 @@ class SimplePatchMLPMean(nn.Module):
         nn.init.zeros_(self.fc2.weight); nn.init.zeros_(self.fc2.bias)
 
         # deterministic fixed skip (only matters if you DON'T load weights)
-        torch.manual_seed(42)
+        #torch.manual_seed(42)
         with torch.no_grad():
             w = torch.randn(out_dim, in_dim)       # [out_dim, in_dim]
             q, _ = torch.linalg.qr(w.t(), mode="reduced")  # q: [in_dim, out_dim]

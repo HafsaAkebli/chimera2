@@ -35,14 +35,14 @@ from PIL import Image
 # === Safe loading for large images ===
 Image.MAX_IMAGE_PIXELS = None
 
-
-
-from clinical.clinical_encoding import build_clinical_text_from_json, get_clinical_embedding
-from classifier.classifier import predict_probability
-from classifier.classifer_clinical_only import predict_probability_clinical_only
-from histology.feature_extraction_uni2_1 import extract_features_from_images
+#from clinical.clinical_encoding import build_clinical_text_from_json, get_clinical_embedding
+#from classifier.classifier import predict_probability
 #from histology.gat_encoder_new import extract_patient_embedding_from_features
 
+from classifier.classifer_clinical_only import predict_probability_clinical_only
+
+from classifier.classifier_new import predict_probability
+from histology.feature_extraction_uni2_1 import extract_features_from_images
 #from histology.patch_extraction_optimal import extract_patches_in_memory, extract_patches_in_memory_2
 from histology.patch_extraction_br import extract_patches_by_cellularity
 from histology.mean_mil import mean_mil_embed
@@ -154,9 +154,6 @@ def interface_0_handler():
         print(f"   ➤ First 5 values: {clinical_embedding[0, :5]}")
 
 
-
-
-
         Classifier_Clinical_Only_PATH = MODEL_PATH / "classifier/clinical_only_MLP_T2_sub2.pth"
         Scaler_Clinical_Only_PATH = MODEL_PATH / "classifier/clinical_only_MLP_T2_sub2_scaler.pkl"
         
@@ -202,11 +199,13 @@ def interface_0_handler():
         #GAT_MODEL_PATH = MODEL_PATH / "gat/GAT_UNI2_cosine_top7K.pth"
         MEAN_MIL_PATH = MODEL_PATH / "meanmil/meanMIL_1024_fixed.pt"
         print("\n📊 Starting patient-level embedding using Mean-MIL...")
-    
-        print(f"   ➤ GAT model path: {MEAN_MIL_PATH}")
+        histology_embedding = mean_mil_embed(features, str(MEAN_MIL_PATH)) 
+        print(f"   ➤ MeanMIL model path: {MEAN_MIL_PATH}")
+
+
         #graph_histology_embedding = extract_patient_embedding_from_features(features, k=5, gat_path=str(GAT_MODEL_PATH))
         #print(f"✅ GAT embedding completed. Shape: {graph_histology_embedding.shape}")
-        histology_embedding = mean_mil_embed(features, str(MEAN_MIL_PATH)) 
+        
 
         del features
         torch.cuda.empty_cache()
@@ -230,22 +229,15 @@ def interface_0_handler():
         print(f"   ➤ First 5 values: {clinical_embedding[0, :5]}")
 
 
-        
-        Classifier_PATH = MODEL_PATH / "classifier/concat_fusion_model_cosine_7K_sub2.pth"
-        Scaler_Clin_PATH = MODEL_PATH / "classifier/concat_fusion_model_cosine_7K_sub2_clinical_scaler.pkl"
-        Scaler_Hist_PATH = MODEL_PATH / "classifier/concat_fusion_model_cosine_7K_sub2_histology_scaler.pkl"
+        Classifier_PATH = MODEL_PATH / "classifier/concat_mlp_meanMIL_onehot.pth"
 
         print("\n🔮 Running final BRS classifier prediction...")
         print(f"   ➤ Classifier path: {Classifier_PATH}")
-        print(f"   ➤ Scalers: Clin={Scaler_Clin_PATH.name}, Hist={Scaler_Hist_PATH.name}")
-
 
         output_brs_binary_classification = predict_probability(
-        graph_histology_embedding,
+        histology_embedding,
         clinical_embedding,
-        model_path=Classifier_PATH,
-        scaler_clin_path=Scaler_Clin_PATH,
-        scaler_hist_path=Scaler_Hist_PATH)
+        model_path=Classifier_PATH)
     
         del graph_histology_embedding, clinical_embedding
         torch.cuda.empty_cache()

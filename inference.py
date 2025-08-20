@@ -209,13 +209,15 @@ def interface_0_handler():
         # clinical_embedding = get_clinical_embedding(clinical_text, Sentence_Transformer_PATH)
         # print(f"✅ Clinical embedding shape: {clinical_embedding.shape}")
 
-        META_PATH = MODEL_PATH / "clinical" / "clinical_preproc_meta_T2.json"
+        META_PATH = MODEL_PATH / "clinical/clinical_preproc_meta_T2.json"
         print("\n🧮 Building one-hot clinical vector...")
         clinical_embedding, clinical_cols = encode_patient(
             patient_data=input_chimera_clinical_data_of_bladder_cancer_patients,
             meta_path=str(META_PATH),
         )
         print(f"   ➤ Clinical vector shape: {clinical_embedding.shape}")
+        print(f"   ➤ First 5 cols: {clinical_cols[:5]}")
+        print(f"   ➤ First 5 values: {clinical_embedding[0, :5]}")
 
 
         

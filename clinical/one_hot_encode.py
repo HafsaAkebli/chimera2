@@ -126,6 +126,8 @@ X, cols = encode_patient(patient_data, str(META_PATH))
 # === print results ===
 print("\n✅ Clinical vector built:")
 print(f"   Shape: {X.shape}\n")
+np.set_printoptions(precision=3, suppress=True) 
+print("X =", X)
 
 for name, val in zip(cols, X[0]):
     print(f"{name:20s} {val:.3f}")

@@ -8,17 +8,18 @@ import joblib
 from pathlib import Path
 
 # === DEFINE CLINICAL MLP MODEL ===
-class ClinicalMLP(nn.Module):
-    def __init__(self, input_dim=1024, hidden_dims=[512, 128], dropout=0.1):
+class ClinMLP(nn.Module):
+    def __init__(self, input_dim, hidden_dims=[128, 64], dropout=0.1):
         super().__init__()
         layers = []
         dims = [input_dim] + hidden_dims
-        for i in range(len(dims) - 1):
-            layers.append(nn.Linear(dims[i], dims[i + 1]))
-            #layers.append(nn.BatchNorm1d(dims[i + 1]))
-            #layers.append(nn.LayerNorm(dims[i + 1]))
-            layers.append(nn.ReLU())
-            layers.append(nn.Dropout(dropout))
+        for i in range(len(dims)-1):
+            layers += [
+                nn.Linear(dims[i], dims[i+1]),
+                nn.LayerNorm(dims[i+1]),   # <- optional, comment/uncomment if you want
+                nn.ReLU(),
+                nn.Dropout(dropout),
+            ]
         layers.append(nn.Linear(dims[-1], 2))
         self.model = nn.Sequential(*layers)
 

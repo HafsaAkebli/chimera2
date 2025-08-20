@@ -199,8 +199,11 @@ def interface_0_handler():
         #GAT_MODEL_PATH = MODEL_PATH / "gat/GAT_UNI2_cosine_top7K.pth"
         MEAN_MIL_PATH = MODEL_PATH / "meanmil/meanMIL_1024_fixed.pt"
         print("\n📊 Starting patient-level embedding using Mean-MIL...")
-        histology_embedding = mean_mil_embed(features, str(MEAN_MIL_PATH)) 
         print(f"   ➤ MeanMIL model path: {MEAN_MIL_PATH}")
+        histology_embedding = mean_mil_embed(features, str(MEAN_MIL_PATH)) 
+        
+        print("\n📊 First 10 elements of the histology embedding:")
+        print(histology_embedding[:10])
 
 
         #graph_histology_embedding = extract_patient_embedding_from_features(features, k=5, gat_path=str(GAT_MODEL_PATH))

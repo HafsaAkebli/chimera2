@@ -22,16 +22,7 @@ class SimplePatchMLPMean(nn.Module):
         self.fc2  = nn.Linear(hidden, out_dim)
         self.skip = nn.Linear(in_dim, out_dim, bias=False)
 
-        # zero-init nonlinear path so initial output ~ skip(norm(x))
-        nn.init.zeros_(self.fc1.weight); nn.init.zeros_(self.fc1.bias)
-        nn.init.zeros_(self.fc2.weight); nn.init.zeros_(self.fc2.bias)
-
-        # deterministic fixed skip (only matters if you DON'T load weights)
-        #torch.manual_seed(42)
-        with torch.no_grad():
-            w = torch.randn(out_dim, in_dim)       # [out_dim, in_dim]
-            q, _ = torch.linalg.qr(w.t(), mode="reduced")  # q: [in_dim, out_dim]
-            self.skip.weight.copy_(q.t())          # [out_dim, in_dim]
+        # No need to initialize weights since we'll load fixed weights from the pre-trained model
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         # x: [N_patches, 1536]
@@ -40,6 +31,7 @@ class SimplePatchMLPMean(nn.Module):
         h   = self.fc2(h)
         z   = h + self.skip(x_n)
         return z.mean(dim=0)  # [1024]
+
 
 
 def _load_mean_mil_model(mean_mil_path: str, in_dim=1536, hidden=512, out_dim=1024):
@@ -72,6 +64,7 @@ def mean_mil_embed(features: np.ndarray, mean_mil_path: str, in_dim=1536, hidden
     if features.ndim != 2 or features.shape[1] != in_dim:
         raise ValueError(f"❌ Expected features shape [N, {in_dim}], got {features.shape}")
 
+    # Load model with pre-trained weights for skip layers
     model, device = _load_mean_mil_model(mean_mil_path, in_dim=in_dim, hidden=hidden, out_dim=out_dim)
 
     feats_t = torch.as_tensor(features, dtype=torch.float32, device=device)  # [N, 1536]

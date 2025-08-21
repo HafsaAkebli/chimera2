@@ -19,10 +19,10 @@ class SimplePatchMLPMean(nn.Module):
         self.fc2 = nn.Linear(hidden, out_dim)
 
         # Deterministic (fixed) weights for inference-time pooling — match saved checkpoint
-        nn.init.zeros_(self.fc1.weight)
-        nn.init.zeros_(self.fc1.bias)
-        nn.init.zeros_(self.fc2.weight)
-        nn.init.zeros_(self.fc2.bias)
+        #nn.init.zeros_(self.fc1.weight)
+        #nn.init.zeros_(self.fc1.bias)
+        #nn.init.zeros_(self.fc2.weight)
+        #nn.init.zeros_(self.fc2.bias)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """

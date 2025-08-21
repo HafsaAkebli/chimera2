@@ -182,12 +182,12 @@ def interface_0_handler():
         
         mean_pooled_vector = features.mean(axis=0).astype(np.float32)
         print("📊 First 5 elements of the mean pooled feature vector:")
-        print(mean_pooled_vector[:5])
+        print(mean_pooled_vector[:10])
 
         MEAN_MIL_PATH = MODEL_PATH / "meanmil/meanMIL_1536_fixed.pt"
         print("\n📊 Starting patient-level embedding using Mean-MIL...")
         print(f"   ➤ MeanMIL model path: {MEAN_MIL_PATH}")
-        
+
         features = features.astype(np.float32, copy=False)
         histology_embedding = mean_mil_embed(features, str(MEAN_MIL_PATH)) 
         

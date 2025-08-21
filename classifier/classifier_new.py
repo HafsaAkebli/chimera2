@@ -63,6 +63,7 @@ class FusionMLP(nn.Module):
         return self.classifier(x)
 
 
+
 def predict_probability(
     histology_embedding: np.ndarray,
     clinical_embedding: np.ndarray,
@@ -72,36 +73,33 @@ def predict_probability(
     Predicts BRS3 probability using the trained FusionMLP model.
 
     Args:
-        histology_embedding (np.ndarray): shape (1, 1024) or (1024,)
+        histology_embedding (np.ndarray): shape (1, 1536) or (1536,)
         clinical_embedding (np.ndarray): shape (1, 34) or (34,)
         model_path (Path): path to trained MLP (.pth)
 
     Returns:
         float: predicted probability of BRS3
     """
-
     # === Preprocess input embeddings ===
-    hist_input = histology_embedding if histology_embedding.shape == (1, 1024) else histology_embedding.reshape(1, -1)
+    # Ensure the embeddings are reshaped correctly if necessary
+    hist_input = histology_embedding if histology_embedding.shape == (1, 1536) else histology_embedding.reshape(1, -1)
     clin_input = clinical_embedding if clinical_embedding.shape == (1, 34) else clinical_embedding.reshape(1, -1)
 
-    # === Do NOT concatenate here! Pass embeddings directly to the model ===
+    # === Convert to torch tensors ===
     input_tensor_hist = torch.tensor(hist_input, dtype=torch.float32)
     input_tensor_clin = torch.tensor(clin_input, dtype=torch.float32)
 
     print(f"🔎 Final input shape → histology: {input_tensor_hist.shape}, clinical: {input_tensor_clin.shape}")
 
     # === Load the model ===
-    model = FusionMLP(hist_dim=1024, clin_dim=34)  # Same dimensions as the original model
+    model = FusionMLP(hist_dim=1536, clin_dim=34)  # Now using hist_dim=1536 for histology embeddings
     model.load_state_dict(torch.load(model_path, map_location="cpu"))
     model.eval()
 
     # === Predict ===
     with torch.no_grad():
-        logits = model(input_tensor_hist, input_tensor_clin)  # pass separately, do NOT concatenate
+        logits = model(input_tensor_hist, input_tensor_clin)  # pass histology and clinical features separately
         print(f"🔢 Logits: {logits}")
-        probs = F.softmax(logits, dim=1)[:, 1].cpu().numpy()
+        probs = F.softmax(logits, dim=1)[:, 1].cpu().numpy()  # Get probability for class 1 (BRS3)
 
-    del model
-    torch.cuda.empty_cache()
-
-    return float(probs[0])
+    return float(probs[0])  # Return the predicted probability of BRS3

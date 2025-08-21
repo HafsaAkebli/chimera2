@@ -47,7 +47,7 @@ print("Torchvision:", torchvision.__version__)
 print("CUDA available:", torch.cuda.is_available())
 
 
-INPUT_PATH = Path("/mnt/dmif-nas/MITEL/hafsa/chimera_bcg/Task2/input3")
+INPUT_PATH = Path("/mnt/dmif-nas/MITEL/hafsa/chimera_bcg/Task2/input5")
 #OUTPUT_PATH = Path("/output")
 OUTPUT_PATH = Path("/mnt/dmif-nas/MITEL/hafsa/chimera_bcg/Task2/model3/output")
 

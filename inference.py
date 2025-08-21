@@ -35,10 +35,6 @@ from PIL import Image
 # === Safe loading for large images ===
 Image.MAX_IMAGE_PIXELS = None
 
-#from clinical.clinical_encoding import build_clinical_text_from_json, get_clinical_embedding
-#from classifier.classifier import predict_probability
-#from histology.gat_encoder_new import extract_patient_embedding_from_features
-
 from classifier.classifier_clinical_only_onehot import predict_probability_clinical_only
 from classifier.classifier_new import predict_probability
 from histology.feature_extraction_uni2_1 import extract_features_from_images

@@ -171,9 +171,6 @@ def interface_0_handler():
         else:
             print(f"✅ Extracted {features.shape[0]} features of dimension {features.shape[1]}")
         
-        mean_pooled_vector = features.mean(axis=0).astype(np.float32)
-        print("📊 First 5 elements of the mean pooled feature vector:")
-        print(mean_pooled_vector[:10])
 
         MEAN_MIL_PATH = MODEL_PATH / "meanmil/meanMIL_1536_fixed.pt"
         print("\n📊 Starting patient-level embedding using Mean-MIL...")

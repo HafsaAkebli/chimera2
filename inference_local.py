@@ -51,7 +51,7 @@ print("Torchvision:", torchvision.__version__)
 print("CUDA available:", torch.cuda.is_available())
 
 
-INPUT_PATH = Path("/mnt/dmif-nas/MITEL/hafsa/chimera_bcg/Task2/input4")
+INPUT_PATH = Path("/mnt/dmif-nas/MITEL/hafsa/chimera_bcg/Task2/input3")
 #OUTPUT_PATH = Path("/output")
 OUTPUT_PATH = Path("/mnt/dmif-nas/MITEL/hafsa/chimera_bcg/Task2/model3/output")
 
@@ -177,21 +177,8 @@ def interface_0_handler():
         print("\n📊 First 10 elements of the histology embedding:")
         print(histology_embedding[:10])
 
-
-        #graph_histology_embedding = extract_patient_embedding_from_features(features, k=5, gat_path=str(GAT_MODEL_PATH))
-        #print(f"✅ GAT embedding completed. Shape: {graph_histology_embedding.shape}")
-        
-
         del features
         torch.cuda.empty_cache()
-
-        #clinical_text = build_clinical_text_from_json(
-        #patient_data=input_chimera_clinical_data_of_bladder_cancer_patients,patient_id=uuid)
-        #print(f"   ➤ Clinical text built:\n{clinical_text}")
-        #print("\n🧠 Getting clinical embedding from transformer...")
-        #Sentence_Transformer_PATH = MODEL_PATH / "multilingual_e5"
-        # clinical_embedding = get_clinical_embedding(clinical_text, Sentence_Transformer_PATH)
-        # print(f"✅ Clinical embedding shape: {clinical_embedding.shape}")
 
         META_PATH = MODEL_PATH / "clinical/clinical_preproc_meta_T2.json"
         print("\n🧮 Building one-hot clinical vector...")
@@ -204,7 +191,7 @@ def interface_0_handler():
         print(f"   ➤ First 5 values: {clinical_embedding[0, :5]}")
 
 
-        Classifier_PATH = MODEL_PATH / "classifier/concat_mlp_meanMIL_onehot.pth"
+        Classifier_PATH = MODEL_PATH / "classifier/fusionMLP.pth"
 
         print("\n🔮 Running final BRS classifier prediction...")
         print(f"   ➤ Classifier path: {Classifier_PATH}")

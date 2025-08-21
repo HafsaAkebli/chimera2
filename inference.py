@@ -39,8 +39,7 @@ Image.MAX_IMAGE_PIXELS = None
 #from classifier.classifier import predict_probability
 #from histology.gat_encoder_new import extract_patient_embedding_from_features
 
-from classifier.classifer_clinical_only import predict_probability_clinical_only
-
+from classifier.classifier_clinical_only_onehot import predict_probability_clinical_only
 from classifier.classifier_new import predict_probability
 from histology.feature_extraction_uni2_1 import extract_features_from_images
 #from histology.patch_extraction_optimal import extract_patches_in_memory, extract_patches_in_memory_2
@@ -154,13 +153,11 @@ def interface_0_handler():
         print(f"   ➤ First 5 values: {clinical_embedding[0, :5]}")
 
 
-        #Classifier_Clinical_Only_PATH = MODEL_PATH / "classifier/clinical_only_MLP_T2_sub2.pth"
-        #Scaler_Clinical_Only_PATH = MODEL_PATH / "classifier/clinical_only_MLP_T2_sub2_scaler.pkl"
+        Classifier_Clinical_Only_PATH = MODEL_PATH / "classifier/clinical_only_classifier.pth"
         
-        #output_brs_binary_classification = predict_probability_clinical_only(
-            #clinical_embedding,
-            #model_path=Classifier_Clinical_Only_PATH,
-            #scaler_path=Scaler_Clinical_Only_PATH)
+        output_brs_binary_classification = predict_probability_clinical_only(
+            clinical_embedding,
+            model_path=Classifier_Clinical_Only_PATH)
         
         del clinical_embedding
         torch.cuda.empty_cache()
@@ -207,14 +204,6 @@ def interface_0_handler():
 
         del features
         torch.cuda.empty_cache()
-
-        #clinical_text = build_clinical_text_from_json(
-        #patient_data=input_chimera_clinical_data_of_bladder_cancer_patients,patient_id=uuid)
-        #print(f"   ➤ Clinical text built:\n{clinical_text}")
-        #print("\n🧠 Getting clinical embedding from transformer...")
-        #Sentence_Transformer_PATH = MODEL_PATH / "multilingual_e5"
-        # clinical_embedding = get_clinical_embedding(clinical_text, Sentence_Transformer_PATH)
-        # print(f"✅ Clinical embedding shape: {clinical_embedding.shape}")
 
         META_PATH = MODEL_PATH / "clinical/clinical_preproc_meta_T2.json"
         print("\n🧮 Building one-hot clinical vector...")

@@ -39,8 +39,7 @@ Image.MAX_IMAGE_PIXELS = None
 #from classifier.classifier import predict_probability
 #from histology.gat_encoder_new import extract_patient_embedding_from_features
 
-from classifier.classifer_clinical_only import predict_probability_clinical_only
-
+from classifier.classifier_clinical_only_onehot import predict_probability_clinical_only
 from classifier.classifier_new import predict_probability
 from histology.feature_extraction_uni2_1 import extract_features_from_images
 #from histology.patch_extraction_optimal import extract_patches_in_memory, extract_patches_in_memory_2
@@ -132,10 +131,9 @@ def interface_0_handler():
 
         Classifier_Clinical_Only_PATH = MODEL_PATH / "classifier/clinical_only_classifier.pth"
         
-        #output_brs_binary_classification = predict_probability_clinical_only(
-            #clinical_embedding,
-            #model_path=Classifier_Clinical_Only_PATH,
-            #scaler_path=Scaler_Clinical_Only_PATH)
+        output_brs_binary_classification = predict_probability_clinical_only(
+        clinical_embedding,
+        model_path=Classifier_Clinical_Only_PATH)
         
         del clinical_embedding
         torch.cuda.empty_cache()

@@ -184,27 +184,26 @@ def interface_0_handler():
         UNI2_MODEL_PATH = MODEL_PATH / "uni2/pytorch_model.bin"
         features = extract_features_from_images(patch_list, UNI2_MODEL_PATH)
 
-        #delete patch list once feature are extracted
-        del patch_list
-        torch.cuda.empty_cache()
-
         # ✅ Check if feature extraction succeeded
         if features is None or features.shape[0] == 0:
             print("❌ Feature extraction failed or returned empty feature matrix.")
             raise ValueError("Feature extraction failed. Cannot proceed to GAT.")
         else:
             print(f"✅ Extracted {features.shape[0]} features of dimension {features.shape[1]}")
+        
+        mean_pooled_vector = features.mean(axis=0).astype(np.float32)
+        print("📊 First 5 elements of the mean pooled feature vector:")
+        print(mean_pooled_vector[:10])
 
-        #GAT_MODEL_PATH = MODEL_PATH / "gat/GAT_UNI2_cosine_top7K.pth"
         MEAN_MIL_PATH = MODEL_PATH / "meanmil/meanMIL_1536_fixed.pt"
         print("\n📊 Starting patient-level embedding using Mean-MIL...")
-        histology_embedding = mean_mil_embed(features, str(MEAN_MIL_PATH)) 
         print(f"   ➤ MeanMIL model path: {MEAN_MIL_PATH}")
 
-
-        #graph_histology_embedding = extract_patient_embedding_from_features(features, k=5, gat_path=str(GAT_MODEL_PATH))
-        #print(f"✅ GAT embedding completed. Shape: {graph_histology_embedding.shape}")
+        features = features.astype(np.float32, copy=False)
+        histology_embedding = mean_mil_embed(features, str(MEAN_MIL_PATH)) 
         
+        print("\n📊 First 10 elements of the histology embedding:")
+        print(histology_embedding[:10])
 
         del features
         torch.cuda.empty_cache()

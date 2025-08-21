@@ -9,12 +9,13 @@ from pathlib import Path
 class FusionMLP(nn.Module):
     def __init__(
         self,
-        hist_dim=1024,
+        hist_dim=1536,
         clin_dim=34,
-        proj_dim=128,
-        fusion_hidden=[256,128, 64],
+        proj_dim_hist=128,
+        proj_dim_clin=128,
+        fusion_hidden=[256, 128, 64],
         num_classes=2,
-        dropout=0.1,
+        dropout=0.05,
         norm_type="batchnorm",  # "batchnorm" | "layernorm" | "none"
     ):
         super().__init__()
@@ -27,48 +28,39 @@ class FusionMLP(nn.Module):
             else:
                 return nn.Identity()
 
-        # per-modality projectors
+        # Per-modality projectors
         self.hist_proj = nn.Sequential(
-            nn.Linear(hist_dim, proj_dim),
-            make_norm(proj_dim),
+            nn.Linear(hist_dim, proj_dim_hist),
+            make_norm(proj_dim_hist),
             nn.ReLU(),
             nn.Dropout(dropout),
         )
         self.clin_proj = nn.Sequential(
-            nn.Linear(clin_dim, proj_dim),
-            make_norm(proj_dim),
+            nn.Linear(clin_dim, proj_dim_clin),
+            make_norm(proj_dim_clin),
             nn.ReLU(),
             nn.Dropout(dropout),
         )
 
-        # fusion MLP with residuals
-        dims = [proj_dim * 2] + fusion_hidden
-        layers, norms = [], []
+        # Fusion MLP
+        fusion_input_dim = proj_dim_hist + proj_dim_clin
+        fusion_layers = []
+        dims = [fusion_input_dim] + fusion_hidden
         for i in range(len(dims) - 1):
-            layers.append(nn.Linear(dims[i], dims[i + 1]))
-            norms.append(make_norm(dims[i + 1]))
-        self.fuse_layers = nn.ModuleList(layers)
-        self.fuse_norms  = nn.ModuleList(norms)
+            fusion_layers.append(nn.Linear(dims[i], dims[i + 1]))
+            fusion_layers.append(make_norm(dims[i + 1]))
+            fusion_layers.append(nn.ReLU())
+            fusion_layers.append(nn.Dropout(dropout))
 
-        self.classifier = nn.Linear(dims[-1], num_classes)
-        self.dropout = nn.Dropout(dropout)
-        self.act = nn.ReLU()
+        self.fusion_mlp = nn.Sequential(*fusion_layers)
+        self.classifier = nn.Linear(fusion_hidden[-1], num_classes)
 
     def forward(self, hist_feat, clin_feat):
         h = self.hist_proj(hist_feat)
         c = self.clin_proj(clin_feat)
         x = torch.cat([h, c], dim=1)
-
-        for layer, norm in zip(self.fuse_layers, self.fuse_norms):
-            residual = x
-            x = layer(x)
-            x = norm(x)
-            x = self.act(x)
-            x = self.dropout(x)
-            if x.shape == residual.shape:
-                x = x + residual
-
-        return self.classifier(x)  # [B,2]
+        x = self.fusion_mlp(x)
+        return self.classifier(x)
 
 
 def predict_probability(

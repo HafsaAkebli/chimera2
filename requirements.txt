@@ -2,7 +2,7 @@ torch>=2.0.1
 torchvision>=0.15
 timm
 
-sentence-transformers==3.4.1
+#sentence-transformers==3.4.1
 transformers==4.46.2
 tokenizers==0.20.3
 safetensors>=0.4.5

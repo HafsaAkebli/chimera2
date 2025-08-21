@@ -120,18 +120,6 @@ def interface_0_handler():
     if not patch_list:
         print("⚠️ No patches extracted. Running clinical-only fallback model...")
 
-        #print("\n📄 Building clinical text from patient JSON...")
-        #clinical_text = build_clinical_text_from_json(
-        #patient_data=input_chimera_clinical_data_of_bladder_cancer_patients,
-        #patient_id=uuid)
-        #print(f"   ➤ Clinical text built:\n{clinical_text}")
-        #print("\n🧠 Getting clinical embedding from transformer...")
-        #Sentence_Transformer_PATH = MODEL_PATH / "multilingual_e5"
-        #clinical_embedding = get_clinical_embedding(clinical_text, Sentence_Transformer_PATH)
-        #print(f"✅ Clinical embedding shape: {clinical_embedding.shape}")
-        #del clinical_text
-        #torch.cuda.empty_cache()
-
         META_PATH = MODEL_PATH / "clinical/clinical_preproc_meta_T2.json"
         print("\n🧮 Building one-hot clinical vector...")
         clinical_embedding, clinical_cols = encode_patient(
@@ -142,9 +130,7 @@ def interface_0_handler():
         print(f"   ➤ First 5 cols: {clinical_cols[:5]}")
         print(f"   ➤ First 5 values: {clinical_embedding[0, :5]}")
 
-
-        #Classifier_Clinical_Only_PATH = MODEL_PATH / "classifier/clinical_only_MLP_T2_sub2.pth"
-        #Scaler_Clinical_Only_PATH = MODEL_PATH / "classifier/clinical_only_MLP_T2_sub2_scaler.pkl"
+        Classifier_Clinical_Only_PATH = MODEL_PATH / "classifier/clinical_only_classifier.pth"
         
         #output_brs_binary_classification = predict_probability_clinical_only(
             #clinical_embedding,

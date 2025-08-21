@@ -53,7 +53,7 @@ print("Torchvision:", torchvision.__version__)
 print("CUDA available:", torch.cuda.is_available())
 
 
-INPUT_PATH = Path("/mnt/dmif-nas/MITEL/hafsa/chimera_bcg/Task2/input3")
+INPUT_PATH = Path("/mnt/dmif-nas/MITEL/hafsa/chimera_bcg/Task2/input1")
 #OUTPUT_PATH = Path("/output")
 OUTPUT_PATH = Path("/mnt/dmif-nas/MITEL/hafsa/chimera_bcg/Task2/model3/output")
 
@@ -184,11 +184,11 @@ def interface_0_handler():
         print("📊 First 5 elements of the mean pooled feature vector:")
         print(mean_pooled_vector[:5])
 
-
-        #GAT_MODEL_PATH = MODEL_PATH / "gat/GAT_UNI2_cosine_top7K.pth"
-        MEAN_MIL_PATH = MODEL_PATH / "meanmil/meanMIL_1024_fixed.pt"
+        MEAN_MIL_PATH = MODEL_PATH / "meanmil/meanMIL_1536_fixed.pt"
         print("\n📊 Starting patient-level embedding using Mean-MIL...")
         print(f"   ➤ MeanMIL model path: {MEAN_MIL_PATH}")
+        
+        features = features.astype(np.float32, copy=False)
         histology_embedding = mean_mil_embed(features, str(MEAN_MIL_PATH)) 
         
         print("\n📊 First 10 elements of the histology embedding:")

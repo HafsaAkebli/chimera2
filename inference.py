@@ -196,7 +196,7 @@ def interface_0_handler():
             print(f"✅ Extracted {features.shape[0]} features of dimension {features.shape[1]}")
 
         #GAT_MODEL_PATH = MODEL_PATH / "gat/GAT_UNI2_cosine_top7K.pth"
-        MEAN_MIL_PATH = MODEL_PATH / "meanmil/meanMIL_1024_fixed.pt"
+        MEAN_MIL_PATH = MODEL_PATH / "meanmil/meanMIL_1536_fixed.pt"
         print("\n📊 Starting patient-level embedding using Mean-MIL...")
         histology_embedding = mean_mil_embed(features, str(MEAN_MIL_PATH)) 
         print(f"   ➤ MeanMIL model path: {MEAN_MIL_PATH}")

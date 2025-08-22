@@ -207,8 +207,8 @@ def interface_0_handler():
         print(f"   ➤ First 5 values: {clinical_embedding[0, :5]}")
 
 
-        Classifier_PATH = MODEL_PATH / "fusion_gat_onehot.pth"
-        GAT_SCALER_PATH = MODEL_PATH / "gat_scaler.pkl"
+        Classifier_PATH = MODEL_PATH / "classifier/fusion_gat_onehot.pth"
+        GAT_SCALER_PATH = MODEL_PATH / "classifier/gat_scaler.pkl"
 
         print("\n🔮 Running final BRS classifier prediction...")
         print(f"   ➤ Classifier path: {Classifier_PATH}")

@@ -52,7 +52,7 @@ print("Torchvision:", torchvision.__version__)
 print("CUDA available:", torch.cuda.is_available())
 
 
-INPUT_PATH = Path("/mnt/dmif-nas/MITEL/hafsa/chimera_bcg/Task2/input10")
+INPUT_PATH = Path("/mnt/dmif-nas/MITEL/hafsa/chimera_bcg/Task2/input3")
 #OUTPUT_PATH = Path("/output")
 OUTPUT_PATH = Path("/mnt/dmif-nas/MITEL/hafsa/chimera_bcg/Task2/model3/output")
 
@@ -194,8 +194,8 @@ def interface_0_handler():
         print(f"   ➤ First 5 values: {clinical_embedding[0, :5]}")
 
 
-        Classifier_PATH = MODEL_PATH / "fusion_gat_onehot.pth"
-        GAT_SCALER_PATH = MODEL_PATH / "gat_scaler.pkl"
+        Classifier_PATH = MODEL_PATH / "classifier/fusion_gat_onehot.pth"
+        GAT_SCALER_PATH = MODEL_PATH / "classifier/gat_scaler.pkl"
 
         print("\n🔮 Running final BRS classifier prediction...")
         print(f"   ➤ Classifier path: {Classifier_PATH}")

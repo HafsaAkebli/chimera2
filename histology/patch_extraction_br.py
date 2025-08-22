@@ -140,7 +140,6 @@ def extract_patches_by_cellularity(wsi_path, mask_path, patch_size=512, tissue_t
 
         top_coords = heapq.nlargest(max_patches, valid_coords, key=lambda x: x[2])
         print(f"🏁 Selecting top {len(top_coords)} patches by cellularity score")
-        print("🧭 First 5 patch coordinates:", top_coords[:5])
 
         # Now read the actual top patches
         print("🖼️ Extracting top-ranked patches...")

@@ -91,18 +91,6 @@ def interface_0_handler():
     )
     _show_torch_cuda_info()
 
-    # Debug: Print information about loaded data
-
-    #print("Data Loading Summary:")
-    # Handle PyVips objects for tissue mask
-    #if hasattr(input_tissue_mask, 'width'):
-    #    print(f"Tissue mask size: {input_tissue_mask.width}x{input_tissue_mask.height}")
-    #else:
-    #    print(f"Tissue mask shape: {input_tissue_mask.shape}")
-    
-    #print(f"Pathology WSI type: {type(input_bladder_cancer_tissue_biopsy_whole_slide_image)}")
-    #if hasattr(input_bladder_cancer_tissue_biopsy_whole_slide_image, 'width'):
-    #    print(f"Pathology WSI size: {input_bladder_cancer_tissue_biopsy_whole_slide_image.width}x{input_bladder_cancer_tissue_biopsy_whole_slide_image.height}")
     print(f"Clinical data keys: {list(input_chimera_clinical_data_of_bladder_cancer_patients.keys()) if input_chimera_clinical_data_of_bladder_cancer_patients else 'None'}")
 
     #handle both mha and tif 
@@ -140,12 +128,11 @@ def interface_0_handler():
         print(f"   ➤ First 5 cols: {clinical_cols[:5]}")
         print(f"   ➤ First 5 values: {clinical_embedding[0, :5]}")
 
-
         Classifier_Clinical_Only_PATH = MODEL_PATH / "classifier/clinical_only_classifier.pth"
         
         output_brs_binary_classification = predict_probability_clinical_only(
-            clinical_embedding,
-            model_path=Classifier_Clinical_Only_PATH)
+        clinical_embedding,
+        model_path=Classifier_Clinical_Only_PATH)
         
         del clinical_embedding
         torch.cuda.empty_cache()
@@ -175,7 +162,14 @@ def interface_0_handler():
             raise ValueError("Feature extraction failed. Cannot proceed to GAT.")
         else:
             print(f"✅ Extracted {features.shape[0]} features of dimension {features.shape[1]}")
-        
+
+        #MEAN_MIL_PATH = MODEL_PATH / "meanmil/meanMIL_1536_fixed.pt"
+        #print("\n📊 Starting patient-level embedding using Mean-MIL...")
+        #print(f"   ➤ MeanMIL model path: {MEAN_MIL_PATH}")
+        #histology_embedding = mean_mil_embed(features, str(MEAN_MIL_PATH)) 
+        #print("\n📊 First 10 elements of the histology embedding:")
+        #print(histology_embedding[:10])
+
         features = features.astype(np.float32, copy=False)
         
         GAT_MODEL_PATH = MODEL_PATH / "gat/GAT_UNI2_cosine_top7K.pth"
@@ -210,7 +204,6 @@ def interface_0_handler():
         clinical_embedding,
         gat_scaler_path=GAT_SCALER_PATH,
         model_path=Classifier_PATH,)
-
 
         print(f"✅ Prediction output: {output_brs_binary_classification}")
         os.makedirs(OUTPUT_PATH, exist_ok=True)

@@ -39,8 +39,13 @@ from classifier.classifier_clinical_only_onehot import predict_probability_clini
 from classifier.classifier_new import predict_probability
 from histology.feature_extraction_uni2_1 import extract_features_from_images
 from histology.patch_extraction_br import extract_patches_by_cellularity
+
 from histology.mean_mil import mean_mil_embed
+
+from histology.gat_encoder_new import extract_patient_embedding_from_features
+
 from clinical.one_hot_encode import encode_patient
+
 
 print("Torch:", torch.__version__)
 print("Torchvision:", torchvision.__version__)
@@ -172,15 +177,21 @@ def interface_0_handler():
             print(f"✅ Extracted {features.shape[0]} features of dimension {features.shape[1]}")
         
 
-        MEAN_MIL_PATH = MODEL_PATH / "meanmil/meanMIL_1536_fixed.pt"
-        print("\n📊 Starting patient-level embedding using Mean-MIL...")
-        print(f"   ➤ MeanMIL model path: {MEAN_MIL_PATH}")
+        #MEAN_MIL_PATH = MODEL_PATH / "meanmil/meanMIL_1536_fixed.pt"
+        #print("\n📊 Starting patient-level embedding using Mean-MIL...")
+        #print(f"   ➤ MeanMIL model path: {MEAN_MIL_PATH}")
+        #histology_embedding = mean_mil_embed(features, str(MEAN_MIL_PATH)) 
+        #print("\n📊 First 10 elements of the histology embedding:")
+        #print(histology_embedding[:10])
 
         features = features.astype(np.float32, copy=False)
-        histology_embedding = mean_mil_embed(features, str(MEAN_MIL_PATH)) 
         
-        print("\n📊 First 10 elements of the histology embedding:")
-        print(histology_embedding[:10])
+        GAT_MODEL_PATH = MODEL_PATH / "gat/GAT_UNI2_cosine_top7K.pth"
+    
+        print("\n📊 Starting patient-level graph embedding using GAT...")
+        print(f"   ➤ GAT model path: {GAT_MODEL_PATH}")
+        histology_embedding = extract_patient_embedding_from_features(features, k=5, gat_path=str(GAT_MODEL_PATH))
+        print(f"✅ GAT embedding completed. Shape: {histology_embedding.shape}")
 
         del features
         torch.cuda.empty_cache()

@@ -208,7 +208,7 @@ def interface_0_handler():
 
 
         Classifier_PATH = MODEL_PATH / "fusion_gat_onehot.pth"
-        
+        GAT_SCALER_PATH = MODEL_PATH / "gat_scaler.pkl"
 
         print("\n🔮 Running final BRS classifier prediction...")
         print(f"   ➤ Classifier path: {Classifier_PATH}")
@@ -216,7 +216,8 @@ def interface_0_handler():
         output_brs_binary_classification = predict_probability(
         histology_embedding,
         clinical_embedding,
-        model_path=Classifier_PATH)
+        gat_scaler_path=GAT_SCALER_PATH,
+        model_path=Classifier_PATH,)
 
 
         print(f"✅ Prediction output: {output_brs_binary_classification}")

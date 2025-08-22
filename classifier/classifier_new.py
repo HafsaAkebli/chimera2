@@ -9,13 +9,13 @@ from pathlib import Path
 class FusionMLP(nn.Module):
     def __init__(
         self,
-        hist_dim=1536,
+        hist_dim=1024,
         clin_dim=34,
         proj_dim_hist=128,
         proj_dim_clin=128,
         fusion_hidden=[256, 128, 64],
         num_classes=2,
-        dropout=0.05,
+        dropout=0.1,
         norm_type="batchnorm",  # "batchnorm" | "layernorm" | "none"
     ):
         super().__init__()
@@ -67,14 +67,16 @@ class FusionMLP(nn.Module):
 def predict_probability(
     histology_embedding: np.ndarray,
     clinical_embedding: np.ndarray,
+    gat_scaler_path: Path,
     model_path: Path
 ) -> float:
     """
     Predicts BRS3 probability using the trained FusionMLP model.
 
     Args:
-        histology_embedding (np.ndarray): shape (1, 1536) or (1536,)
+        histology_embedding (np.ndarray): shape (1, 1024) or (1024,)
         clinical_embedding (np.ndarray): shape (1, 34) or (34,)
+        gat_scaler_path (Path): path to histology scaler (.pkl)
         model_path (Path): path to trained MLP (.pth)
 
     Returns:
@@ -82,17 +84,23 @@ def predict_probability(
     """
     # === Preprocess input embeddings ===
     # Ensure the embeddings are reshaped correctly if necessary
-    hist_input = histology_embedding if histology_embedding.shape == (1, 1536) else histology_embedding.reshape(1, -1)
+    hist_input = histology_embedding if histology_embedding.shape == (1, 1024) else histology_embedding.reshape(1, -1)
     clin_input = clinical_embedding if clinical_embedding.shape == (1, 34) else clinical_embedding.reshape(1, -1)
 
+    # === Load the histology scaler ===
+    scaler_hist = joblib.load(gat_scaler_path)
+
+    # === Scale the histology embedding ===
+    hist_input_scaled = scaler_hist.transform(hist_input)
+
     # === Convert to torch tensors ===
-    input_tensor_hist = torch.tensor(hist_input, dtype=torch.float32)
+    input_tensor_hist = torch.tensor(hist_input_scaled, dtype=torch.float32)
     input_tensor_clin = torch.tensor(clin_input, dtype=torch.float32)
 
     print(f"🔎 Final input shape → histology: {input_tensor_hist.shape}, clinical: {input_tensor_clin.shape}")
 
     # === Load the model ===
-    model = FusionMLP(hist_dim=1536, clin_dim=34)  # Now using hist_dim=1536 for histology embeddings
+    model = FusionMLP(hist_dim=1024, clin_dim=34)  # Now using hist_dim=1024 for histology embeddings
     model.load_state_dict(torch.load(model_path, map_location="cpu"))
     model.eval()
 

@@ -207,7 +207,8 @@ def interface_0_handler():
         print(f"   ➤ First 5 values: {clinical_embedding[0, :5]}")
 
 
-        Classifier_PATH = MODEL_PATH / "classifier/fusionMLP.pth"
+        Classifier_PATH = MODEL_PATH / "fusion_gat_onehot.pth"
+        
 
         print("\n🔮 Running final BRS classifier prediction...")
         print(f"   ➤ Classifier path: {Classifier_PATH}")

@@ -63,7 +63,6 @@ class FusionMLP(nn.Module):
         return self.classifier(x)
 
 
-
 def predict_probability(
     histology_embedding: np.ndarray,
     clinical_embedding: np.ndarray,

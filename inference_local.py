@@ -40,7 +40,7 @@ from classifier.classifier_new import predict_probability
 from histology.feature_extraction_uni2_1 import extract_features_from_images
 from histology.patch_extraction_br import extract_patches_by_cellularity
 
-from histology.mean_mil import mean_mil_embed
+#from histology.mean_mil import mean_mil_embed
 
 from histology.gat_encoder_new import extract_patient_embedding_from_features
 
@@ -52,7 +52,7 @@ print("Torchvision:", torchvision.__version__)
 print("CUDA available:", torch.cuda.is_available())
 
 
-INPUT_PATH = Path("/mnt/dmif-nas/MITEL/hafsa/chimera_bcg/Task2/input3")
+INPUT_PATH = Path("/mnt/dmif-nas/MITEL/hafsa/chimera_bcg/Task2/input5")
 #OUTPUT_PATH = Path("/output")
 OUTPUT_PATH = Path("/mnt/dmif-nas/MITEL/hafsa/chimera_bcg/Task2/model3/output")
 

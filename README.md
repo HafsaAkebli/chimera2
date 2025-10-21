@@ -1,1 +1,1 @@
-# chimeraT2
+# chimera Task 2: BCG prediction

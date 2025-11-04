@@ -1,0 +1,68 @@
+{
+  "categorical": {
+    "sex": [
+      "Female",
+      "Male",
+      "Missing"
+    ],
+    "smoking": [
+      "Missing",
+      "No",
+      "Yes"
+    ],
+    "tumor": [
+      "Missing",
+      "Primary",
+      "Recurrence"
+    ],
+    "stage": [
+      "Missing",
+      "T1HG",
+      "T2HG",
+      "T3HG",
+      "TaHG"
+    ],
+    "substage": [
+      "Missing",
+      "T1e",
+      "T1m"
+    ],
+    "grade": [
+      "G2",
+      "G3",
+      "Missing"
+    ],
+    "reTUR": [
+      "Missing",
+      "No",
+      "Yes"
+    ],
+    "LVI": [
+      "Missing",
+      "No",
+      "Yes"
+    ],
+    "variant": [
+      "Missing",
+      "UCC",
+      "UCC + Variant"
+    ],
+    "EORTC": [
+      "High risk",
+      "Highest risk",
+      "Missing"
+    ]
+  },
+  "numeric": {
+    "age": {
+      "median": 70.0,
+      "mean": 69.03296703296704,
+      "std": 9.086822422946645
+    },
+    "no_instillations": {
+      "median": 18.0,
+      "mean": 18.560439560439562,
+      "std": 9.070794567870054
+    }
+  }
+}

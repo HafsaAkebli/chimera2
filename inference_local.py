@@ -34,16 +34,12 @@ import pyvips
 from PIL import Image
 # === Safe loading for large images ===
 Image.MAX_IMAGE_PIXELS = None
-
 from classifier.classifier_clinical_only_onehot import predict_probability_clinical_only
 from classifier.classifier import predict_probability
 from histology.feature_extraction_uni2 import extract_features_from_images
 from histology.patch_extraction_br import extract_patches_by_cellularity
-
 from histology.gat_encoder import extract_patient_embedding_from_features
 from clinical.one_hot_encode import encode_patient
-
-
 print("Torch:", torch.__version__)
 print("Torchvision:", torchvision.__version__)
 print("CUDA available:", torch.cuda.is_available())
@@ -51,8 +47,11 @@ print("CUDA available:", torch.cuda.is_available())
 INPUT_PATH = Path("/input")
 OUTPUT_PATH = Path("/output")
 RESOURCE_PATH = Path("resources")
-MODEL_PATH = Path("/opt/ml/model")
+#MODEL_PATH = Path("/opt/ml/model")
 
+MODEL_PATH="/mnt/dmif-nas/MITEL/hafsa/chimera_bcg/Task2/model"
+INPUT_PATH = Path("/mnt/dmif-nas/MITEL/hafsa/chimera_bcg/Task2/input4")
+OUTPUT_PATH = Path("/mnt/dmif-nas/MITEL/hafsa/chimera_bcg/Task2/output")
 
 def run():
     # The key is a tuple of the slugs of the input sockets
@@ -70,7 +69,6 @@ def run():
 
     # Call the handler
     return handler()
-
 
 def interface_0_handler():
     # Read the input
@@ -180,7 +178,6 @@ def interface_0_handler():
         print(f"   ➤ First 5 cols: {clinical_cols[:5]}")
         print(f"   ➤ First 5 values: {clinical_embedding[0, :5]}")
 
-
         Classifier_PATH = MODEL_PATH / "classifier/fusion_gat_onehot.pth"
         GAT_SCALER_PATH = MODEL_PATH / "classifier/gat_scaler.pkl"
 
@@ -220,7 +217,6 @@ def load_json_file(*, location):
     # Reads a json file
     with open(location, "r") as f:
         return json.loads(f.read())
-
 
 
 def write_json_file(*, location, content):

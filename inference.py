@@ -162,7 +162,7 @@ def interface_0_handler():
 
         features = features.astype(np.float32, copy=False)
         
-        GAT_MODEL_PATH = MODEL_PATH / "gat/GAT_UNI2_cosine_top6K.pth"
+        GAT_MODEL_PATH = MODEL_PATH / "gat/GAT_UNI2_cosine_top7K.pth"
     
         print("\n📊 Starting patient-level graph embedding using GAT...")
         print(f"   ➤ GAT model path: {GAT_MODEL_PATH}")

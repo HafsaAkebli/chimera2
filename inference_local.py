@@ -50,7 +50,7 @@ RESOURCE_PATH = Path("resources")
 #MODEL_PATH = Path("/opt/ml/model")
 
 MODEL_PATH = Path("/mnt/dmif-nas/MITEL/hafsa/chimera_bcg/Task2/model")
-INPUT_PATH = Path("/mnt/dmif-nas/MITEL/hafsa/chimera_bcg/Task2/input4")
+INPUT_PATH = Path("/mnt/dmif-nas/MITEL/hafsa/chimera_bcg/Task2/input2")
 OUTPUT_PATH = Path("/mnt/dmif-nas/MITEL/hafsa/chimera_bcg/Task2/output")
 
 def run():

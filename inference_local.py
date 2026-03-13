@@ -49,7 +49,7 @@ OUTPUT_PATH = Path("/output")
 RESOURCE_PATH = Path("resources")
 #MODEL_PATH = Path("/opt/ml/model")
 
-MODEL_PATH="/mnt/dmif-nas/MITEL/hafsa/chimera_bcg/Task2/model"
+MODEL_PATH = Path("/mnt/dmif-nas/MITEL/hafsa/chimera_bcg/Task2/model")
 INPUT_PATH = Path("/mnt/dmif-nas/MITEL/hafsa/chimera_bcg/Task2/input4")
 OUTPUT_PATH = Path("/mnt/dmif-nas/MITEL/hafsa/chimera_bcg/Task2/output")
 
